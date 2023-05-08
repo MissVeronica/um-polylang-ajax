@@ -13,6 +13,7 @@ Version 1.0.0
 
 ## Template
 1. Customize the template `members-header.php`
+2. Read UM Documentation https://docs.ultimatemember.com/article/1516-templates-map
 
 
 ```
