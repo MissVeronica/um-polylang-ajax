@@ -22,21 +22,10 @@ class UM_Polylang_Ajax {
 
         add_filter( 'um_ajax_get_members_response', array( $this, 'um_ajax_get_members_response_headers' ), 100, 2 );
         add_filter( 'pll_preferred_language',       array( $this, 'um_ajax__pll_preferred_language' ), 10, 2 );
+
     }
 
     public function um_ajax_get_members_response_headers( $member_directory_response, $directory_data ) {
-
-        global $current_user;
-
-        if( defined( 'DOING_AJAX' ) && DOING_AJAX && is_user_logged_in() ) {
-
-            if ( ! class_exists( 'PLL' )) {
-
-                add_action( 'locale', function() {                
-                    return get_user_locale( $current_user->ID );
-                });
-            }
-        }
 
         if ( empty( $directory_data['header'] )) {
             $string = __( '{total_users} Members', 'ultimate-member' );
@@ -57,17 +46,21 @@ class UM_Polylang_Ajax {
 
     public function um_ajax__pll_preferred_language( $slug, $cookie ) {  
 
-        if( defined( 'DOING_AJAX' ) && DOING_AJAX && is_user_logged_in() ) {
-           if ( $cookie ) {
-               if ( ! strpos( wp_get_referer(), '/' . $slug . '/' )) {
-                    $slug = pll_default_language( 'slug' );
-                }
+        global $current_user;
+
+        if ( defined( 'DOING_AJAX' ) && DOING_AJAX && is_user_logged_in() ) {
+
+            $pll_locale = pll_default_language( 'locale' );
+            if ( um_user( 'locale' ) != $pll_locale ) {
+                update_user_meta( $current_user->ID, 'locale', $pll_locale );
+                UM()->user()->remove_cache( $current_user->ID );
+                um_fetch_user( $current_user->ID );
             }
         }
 
         return $slug;
     }
-
+    
 }
 
 new UM_Polylang_Ajax();
