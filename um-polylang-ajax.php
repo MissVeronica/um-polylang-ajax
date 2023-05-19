@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     Ultimate Member - Polylang Ajax
  * Description:     Extension to Ultimate Member for Members Directory translations of Users hit counter with and without Polylang
- * Version:         2.2.0
+ * Version:         2.3.0
  * Requires PHP:    7.4
  * Author:          Miss Veronica
  * License:         GPL v2 or later
@@ -25,8 +25,7 @@ class UM_Polylang_Ajax {
     function __construct() {
 
         add_filter( 'um_ajax_get_members_response', array( $this, 'um_ajax_get_members_response_headers' ), 100, 2 );
-        //add_filter( 'pll_preferred_language',       array( $this, 'um_ajax__pll_preferred_language' ), 10, 2 );
-        add_filter( 'after_setup_theme',            array( $this, 'um_ajax__pll_register_strings' ), 10, 1 );
+        add_action( 'admin_init',                   array( $this, 'um_ajax__pll_register_strings' ), 10 );
     }
 
     public function um_ajax__pll_register_strings() {
@@ -69,29 +68,6 @@ class UM_Polylang_Ajax {
         }
 
         return $member_directory_response;
-    }
-
-    public function um_ajax__pll_preferred_language( $slug, $cookie ) {  
-
-        global $current_user;
-
-        if ( defined( 'DOING_AJAX' ) && DOING_AJAX && is_user_logged_in() ) {
-
-            $pll_locale = pll_default_language( 'locale' );            
-
-            if ( um_user( 'locale' ) != $pll_locale ) {
-                
-                $page_id = UM()->options()->get( UM()->options()->get_core_page_id( 'members' ) );
-                $languages = include POLYLANG_DIR . '/settings/languages.php';
-                pll_set_post_language( $page_id, $languages[$pll_locale]['code'] );
-
-                update_user_meta( $current_user->ID, 'locale', $pll_locale );
-                UM()->user()->remove_cache( $current_user->ID );
-                um_fetch_user( $current_user->ID );
-            }
-        }
-
-        return $slug;
     }
     
 }
