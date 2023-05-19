@@ -32,7 +32,7 @@ class UM_Polylang_Ajax {
 
         if ( defined( 'POLYLANG_VERSION' ) && function_exists( 'pll_register_string' ) ) {
 
-            $group = 'Polylang';
+            $group = 'Polylang UM Members Directory';
 
             pll_register_string( 'pll_0', $this->string[0], $group );
             pll_register_string( 'pll_1', $this->string[1], $group );
