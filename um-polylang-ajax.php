@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     Ultimate Member - Polylang Ajax
  * Description:     Extension to Ultimate Member for Members Directory translations of Users hit counter with and without Polylang
- * Version:         2.3.0
+ * Version:         3.0.0
  * Requires PHP:    7.4
  * Author:          Miss Veronica
  * License:         GPL v2 or later
